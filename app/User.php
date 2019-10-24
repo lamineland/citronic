@@ -10,6 +10,16 @@ class User extends Authenticatable
 {
     use Notifiable;
 
+    /***
+     * 
+     * Un utilisateur a un rôle
+     */
+
+     public function role() 
+     {
+         return $this->belongsTo('App\Role','foreign_key');
+     }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -18,6 +28,7 @@ class User extends Authenticatable
     protected $fillable = [
         'prenom', 
         'nom', 
+        'role_id',
         'email', 
         'password'
     ];

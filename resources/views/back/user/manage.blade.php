@@ -72,28 +72,40 @@
                                         <th>Nom</th>
                                         <th>Email</th>
                                         <th>Rôle</th>
-                                        <th>Actions</th>
+                                        <th colspan="3">Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
 
-                                    @empty($stocks)
+                                    @empty($users)
                                         <tr>
-                                            <p> Le stock est vide !</p>
+                                            <p> Aucun utilisateur !</p>
                                         </tr>
                                     @endempty
 
                                     @foreach ($users as $user) 
                                         <tr>
-                                            
                                             <td>{{ $user->prenom }}</td>
                                             <td>{{ $user->nom }}</td>
                                             <td>{{ $user->email }}</td>
-                                            <td>Son role</td>
-                                            <td>
+                                            @foreach ($roles as $role)
+                                                @if($user->role_id == $role->id)
+                                                    <td>{{ $role->role_name }}</td>
+                                                @endif
+                                            @endforeach
+                                            <!-- essayer de régler ce défaut d'une autre manière que le colspan -->
+                                            <td style="border: 0px solid #dddddd;">
                                                 <button class="btn btn-primary" href="{{ route('users.show',$user->id)}}"><i class="fa fa-eye"></i></button>
+                                            </td>
+                                            <td style="border: 0px solid #dddddd;">
                                                 <button class="btn btn-info" href="{{ route('users.edit',$user->id)}}"><i class="fa fa-pencil"></i></button>
-                                                <button class="btn btn-warning" href="{{ route('users.destroy',$user->id)}}"><i class="fa fa-remove"></i></button>
+                                            </td>
+                                            <td style="border: 0px solid #dddddd;">
+                                                <form action="{{ route('users.destroy',$user->id)}}" method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-warning"><i class="fa fa-remove"></i></button>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach 
@@ -106,7 +118,7 @@
                                         <th>Nom</th>
                                         <th>Email</th>
                                         <th>Rôle</th>
-                                        <th>Actions</th>
+                                        <th colspan="3">Actions</th>
                                     </tr>
                                     </tfoot>
                                 </table>

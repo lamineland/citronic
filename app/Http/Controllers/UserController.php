@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Role;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -18,8 +19,9 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all();
-
-        return view('back.user.manage')->with('users', $users);
+        $roles = Role::all();
+        
+        return view('back.user.manage', ['users' => $users, 'roles' => $roles]);
     }
 
     /**
@@ -29,7 +31,9 @@ class UserController extends Controller
      */
     public function create()
     {
-        return view('back.user.adduser');
+        $roles = Role::all();
+
+        return view('back.user.adduser')->with('roles',$roles);
     }
 
     /**
@@ -56,6 +60,7 @@ class UserController extends Controller
         $user = new User([
             'prenom' => $request->get('prenom'),
             'nom' => $request->get('nom'),
+            'role' => $request->get('role_id'),
             'email' => $request->get('email'),
             'password' => Hash::make($request->get('password'))
         ]);
@@ -107,6 +112,8 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        User::where('id',$id)->delete();
+
+        return redirect('users')->with('succes', 'Utilisateur supprimé !');
     }
 }
